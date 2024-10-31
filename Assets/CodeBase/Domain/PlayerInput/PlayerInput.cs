@@ -12,6 +12,7 @@ namespace CodeBase.Domain.PlayerInput
 
         public event Action StartGameClicked;
         public event Action RestartGameClicked;
+        public event Action RocketLaunced;
         
         private bool _isGameStarted;
 
@@ -28,6 +29,10 @@ namespace CodeBase.Domain.PlayerInput
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 _cannon.Shoot();
+            }
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                _cannon.RocketShoot();
             }
 
             CannonRotationControl();

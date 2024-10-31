@@ -3,6 +3,7 @@ using CodeBase.Domain.Enemy.Factory;
 using CodeBase.Domain.Text;
 using DIContainer.Factory;
 using Domain.Player;
+using Domain.Rocket;
 using Domain.Target.Source;
 using Domain.UI;
 using UnityEngine;
@@ -49,11 +50,16 @@ namespace DIContainer
             _container.RegisterInstance<AbstractEnemy>("Enemy", enemyInstance);
 
             // Инициализация UI
+            UIInitialization(projectileEventService, playerInstance);
+        }
+
+        private void UIInitialization(IProjectileEventService projectileEventService, Player playerInstance)
+        {
             var scoreView = _container.Resolve<IFactory>().Create(_scoreView);
             scoreView.SetProjectilesListener(projectileEventService);
 
             var healthView = _container.Resolve<IFactory>().Create(_healthView);
-            _healthView.SetPlayerService(playerInstance);
+            healthView.SetPlayerService(playerInstance);
         }
 
         private void FactoryRegistration(AbstractProjectilesSource source)
