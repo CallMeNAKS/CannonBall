@@ -1,7 +1,7 @@
-﻿using CodeBase.Domain.AxisBases;
+﻿using System;
+using CodeBase.Domain.AxisBases;
 using CodeBase.Domain.Cannon;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace CodeBase.Domain.PlayerInput
 {
@@ -10,8 +10,8 @@ namespace CodeBase.Domain.PlayerInput
         [SerializeField] private AbstractCannon _cannon;
         [SerializeField] private AbstractAxisBases _axisBases;
 
-        public UnityEvent RestartGame = new();
-        public UnityEvent StartGameEvent = new();
+        public event Action StartGameClicked;
+        public event Action RestartGameClicked;
         
         private bool _isGameStarted;
 
@@ -19,21 +19,36 @@ namespace CodeBase.Domain.PlayerInput
         {
             if (Input.anyKeyDown && !_isGameStarted)
             {
-                _isGameStarted = true;
-                StartGameEvent.Invoke();
+                StartGame();
             }
             if (Input.GetKeyDown(KeyCode.R))
             {
-                _isGameStarted = false;
-                RestartGame.Invoke();
+                RestartGame();
             }
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 _cannon.Shoot();
             }
 
+            CannonRotationControl();
+        }
+
+        private void CannonRotationControl()
+        {
             var input = new Vector2(Input.GetAxis("Horizontal"), -Input.GetAxis("Vertical"));
             _axisBases.Rotate(input * Time.deltaTime);
+        }
+
+        private void StartGame()
+        {
+            _isGameStarted = true;
+            StartGameClicked?.Invoke();
+        }
+
+        private void RestartGame()
+        {
+            _isGameStarted = false;
+            RestartGameClicked?.Invoke();
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
-using UnityEngine;
 using DG.Tweening;
 using Unity.VisualScripting;
+using UnityEngine;
 
 namespace CodeBase.Domain.Text
 {
@@ -10,6 +10,7 @@ namespace CodeBase.Domain.Text
     {
         [SerializeField] private float _transformMultiplier = 1.2f;
         [SerializeField] private float _animationDuration = 0.5f;
+        [SerializeField] private Transform _textTransform;
 
         private void OnEnable()
         {
@@ -20,10 +21,10 @@ namespace CodeBase.Domain.Text
         {
             while (true)
             {
-                transform.DOScale(_transformMultiplier, _animationDuration).SetEase(Ease.InOutSine);
+                _textTransform.DOScale(_transformMultiplier, _animationDuration).SetEase(Ease.InOutSine);
                 yield return new WaitForSeconds(_animationDuration);
 
-                transform.DOScale(1.0f, _animationDuration).SetEase(Ease.InOutSine);
+                _textTransform.DOScale(1.0f, _animationDuration).SetEase(Ease.InOutSine);
                 yield return new WaitForSeconds(_animationDuration);
             }
         }

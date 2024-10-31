@@ -1,24 +1,25 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using DG.Tweening;
 using Domain.Target;
 using Domain.Target.Source;
 using UnityEngine;
-using Random = UnityEngine.Random;
-using DG.Tweening;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace CodeBase.Domain.Enemy
 {
     public class BaseEnemy : AbstractEnemy
     {
-        [SerializeField] private AbstractTargetSource _targetSource;
-        [SerializeField] private Transform _playerTransform;
         [SerializeField] private float _timeToChangePlace = 2f;
-        
-        private Transform _defaultTransform;
 
+        [SerializeField] private List<Transform> _projectilesPositions;
+        
+        private Vector3 _defaultTransform;
+        
         private void Awake()
         {
-            _defaultTransform = transform;
+            _defaultTransform = transform.position;
         }
 
         public override void Attack()
@@ -35,18 +36,22 @@ namespace CodeBase.Domain.Enemy
         {
             StopAllCoroutines();
             transform.DOKill();
-            transform.position = _defaultTransform.position;
+            transform.position = _defaultTransform;
         }
 
         private IEnumerator StartShooting()
         {
             while (true)
             {
-                Vector3 direction = _playerTransform.position + new Vector3(0, 0.5f, 0) - transform.position;
-                AbstractTarget projectile = _targetSource.GetTarget();
-                projectile.transform.position = transform.position;
-                projectile.ApplyPower(direction * _attackPower);
-                yield return new WaitForSeconds(2f);
+                for (int i = 0; i < _projectilesPositions.Count; i++)
+                {
+                    _projectilesPositions[i].LookAt(_target.transform.position);
+                    Vector3 direction = _target.position + new Vector3(0, 1f, 0) - _projectilesPositions[i].position;
+                    AbstractProjectile projectile = _projectilesSource.GetTarget();
+                    projectile.transform.position = _projectilesPositions[i].position;
+                    projectile.ApplyPower(direction * _attackPower);
+                    yield return new WaitForSeconds(2f);
+                }
             }
         }
 

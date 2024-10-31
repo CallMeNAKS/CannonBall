@@ -268,6 +268,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cannon: {fileID: 1254713002558978712}
   _axisBases: {fileID: 772272398}
+  RestartGame:
+    m_PersistentCalls:
+      m_Calls: []
+  StartGameEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4450807057922685034
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,7 +408,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _axis: {fileID: 772272399}
-  _cofficient: {x: 100, y: 100}
+  _cofficient: {x: 50, y: 30}
 --- !u!114 &772272399
 MonoBehaviour:
   m_ObjectHideFlags: 0

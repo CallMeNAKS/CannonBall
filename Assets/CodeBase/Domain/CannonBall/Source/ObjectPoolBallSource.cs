@@ -12,7 +12,7 @@ namespace CodeBase.Domain.CannonBall.Source
 
         private Queue<Ball> _balls = new();
         private List<Ball> _ballPool = new();
-        
+
         public override Ball New()
         {
             if (_balls.TryDequeue(out var newBall))
@@ -32,10 +32,10 @@ namespace CodeBase.Domain.CannonBall.Source
         private IEnumerator CountDown(Ball ball)
         {
             yield return new WaitForSeconds(_ballLifeTime);
-            if (ball != null && ball.gameObject != null) // Проверяем, был ли объект уничтожен
+            if (ball != null && ball.gameObject != null)
             {
-            ball.gameObject.SetActive(false);
-            _balls.Enqueue(ball);
+                ball.gameObject.SetActive(false);
+                _balls.Enqueue(ball);
             }
         }
 
