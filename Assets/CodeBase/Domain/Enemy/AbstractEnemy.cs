@@ -1,4 +1,6 @@
-﻿using Domain.Target.Source;
+﻿using System;
+using Domain.Target.Source;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace CodeBase.Domain.Enemy
@@ -8,6 +10,12 @@ namespace CodeBase.Domain.Enemy
         [SerializeField] protected float _attackPower = 1f;
         [SerializeField] protected Transform _target;
         [SerializeField] protected AbstractProjectilesSource _projectilesSource;
+        
+        [SerializeField] protected float _health = 100f;
+        
+        public float Health { get => _health; private set => _health = value; }
+        public abstract event Action<float> DamageTaken; 
+        public event Action OnDeath; 
 
         public void SetTarget(Transform target)
         {
@@ -20,5 +28,11 @@ namespace CodeBase.Domain.Enemy
         public abstract void Attack();
         public abstract void Move();
         public abstract void Reset();
+        public abstract void TakeDamage(float damage);
+
+        protected void Death()
+        {
+            OnDeath?.Invoke();
+        }
     }
 }

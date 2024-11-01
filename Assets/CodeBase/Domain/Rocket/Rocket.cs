@@ -11,6 +11,7 @@ namespace Domain.Rocket
         [SerializeField] private float _speed;
         [SerializeField] private float _damage;
         
+        public float Damage { get { return _damage; } private set { _damage = value; } }
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();

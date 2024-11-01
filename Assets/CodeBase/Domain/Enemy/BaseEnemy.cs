@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Domain.Rocket;
 using Domain.Target;
 using Domain.Target.Source;
 using UnityEngine;
@@ -21,6 +23,8 @@ namespace CodeBase.Domain.Enemy
         {
             _defaultTransform = transform.position;
         }
+
+        public override event Action<float> DamageTaken;
 
         public override void Attack()
         {
@@ -63,6 +67,19 @@ namespace CodeBase.Domain.Enemy
             Vector3 targetPosition = new Vector3(randomX, randomY, transform.position.z);
 
             transform.DOMove(targetPosition, _timeToChangePlace).OnComplete(MoveToRandomPosition);
+        }
+
+        public override void TakeDamage(float damage)
+        {
+            if (_health > 0)
+            {
+                _health -= damage;
+                DamageTaken?.Invoke(_health);
+            }
+            else
+            {
+                Death();
+            }
         }
     }
 }
