@@ -9,7 +9,6 @@ using Domain.UI;
 using UnityEngine;
 
 namespace DIContainer
-
 {
     public class SceneContext : MonoBehaviour
     {
@@ -24,15 +23,20 @@ namespace DIContainer
         [Header("ProjectileSource")] [SerializeField]
         private AbstractProjectilesSource _projectilesSource;
 
-
         [Header("UI")] [SerializeField] private TextAnimation _startText;
         [SerializeField] private ScoreView _scoreView;
         [SerializeField] private HealthView _healthView;
+        [SerializeField] private Domain.Shop.Shop _shopUI;
 
         private void Awake()
         {
             _container = new DIContainer();
+            RegisterServices();
+            InitializeGame();
+        }
 
+        private void RegisterServices()
+        {
             _container.RegisterSingleton<IFactory>(c => new GenericFactory());
 
             AbstractProjectilesSource projectileSourceService =
@@ -41,16 +45,23 @@ namespace DIContainer
 
             FactoryRegistration(projectileSourceService);
 
-            // Создаём игрока и врага через фабрики
             var playerInstance = _container.Resolve<IPlayerFactory>().Create();
             var enemyInstance = _container.Resolve<IEnemyFactory>().Create(playerInstance.transform);
 
-            // Регистрируем экземпляры
             _container.RegisterInstance<Player>("Player", playerInstance);
             _container.RegisterInstance<AbstractEnemy>("Enemy", enemyInstance);
 
-            // Инициализация UI
             UIInitialization(projectileEventService, playerInstance);
+
+            // Создание GameState через DI и регистрация
+            _container.RegisterSingleton<GameState>(c =>
+                new GameState(_container.Resolve<Domain.Shop.Shop>(), playerInstance, enemyInstance));
+        }
+
+        private void InitializeGame()
+        {
+            var gameState = _container.Resolve<GameState>();
+            gameState.Initialize(); // Инициализируем GameState после создания
         }
 
         private void UIInitialization(IProjectileEventService projectileEventService, Player playerInstance)
@@ -60,6 +71,11 @@ namespace DIContainer
 
             var healthView = _container.Resolve<IFactory>().Create(_healthView);
             healthView.SetPlayerService(playerInstance);
+
+            var shopUI = _container.Resolve<IFactory>().Create(_shopUI);
+            shopUI.OfflineShop();
+            
+            _container.RegisterInstance(shopUI);
         }
 
         private void FactoryRegistration(AbstractProjectilesSource source)

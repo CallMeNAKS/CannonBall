@@ -76,7 +76,7 @@ namespace CodeBase.Domain.Enemy
                 _health -= damage;
                 DamageTaken?.Invoke(_health);
             }
-            else
+            if (_health <= 0)
             {
                 Death();
             }

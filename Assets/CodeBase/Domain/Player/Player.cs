@@ -8,6 +8,8 @@ namespace Domain.Player
     public class Player : MonoBehaviour, IPlayerService
     {
         public event Action<int> PlayerTookDamage;
+        
+        public event Action PlayerLost;
 
         [SerializeField] private int _health = 6;
 
@@ -26,8 +28,15 @@ namespace Domain.Player
 
         private void PlayerTakesDamage()
         {
-            _health--;
-            InvokeEvent();
+            if (_health > 0)
+            {
+                _health--;
+                InvokeEvent();
+            }
+            else
+            {
+                PlayerLost?.Invoke();
+            }
         }
 
         private void InvokeEvent()

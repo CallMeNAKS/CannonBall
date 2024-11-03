@@ -239,7 +239,7 @@ MonoBehaviour:
   _attackPower: 0.8
   _target: {fileID: 0}
   _projectilesSource: {fileID: 0}
-  _health: 100
+  _health: 10
   _timeToChangePlace: 2
   _projectilesPositions:
   - {fileID: 7143425171545254514}
