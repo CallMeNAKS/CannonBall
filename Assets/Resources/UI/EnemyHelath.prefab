@@ -331,7 +331,7 @@ GameObject:
   - component: {fileID: 9019860092336504468}
   - component: {fileID: 2798851296524946154}
   m_Layer: 5
-  m_Name: Enemy Helath Canvas
+  m_Name: EnemyHelath
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

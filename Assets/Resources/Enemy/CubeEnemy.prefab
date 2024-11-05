@@ -341,7 +341,7 @@ GameObject:
   - component: {fileID: 5491092551398944784}
   - component: {fileID: 5491092551398944783}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: CubeEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
