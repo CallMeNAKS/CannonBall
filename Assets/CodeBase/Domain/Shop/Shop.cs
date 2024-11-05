@@ -14,7 +14,6 @@ namespace Domain.Shop
             foreach (var item in shopItems)
             {
                 item.SetActive(false);
-                Debug.Log(item.activeSelf);
             }
         }
 
@@ -23,7 +22,6 @@ namespace Domain.Shop
             foreach (var shopItem in shopItems)
             {
                 shopItem.SetActive(true);
-                Debug.Log(shopItem.activeSelf);
             }
         }
     }

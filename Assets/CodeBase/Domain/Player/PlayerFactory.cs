@@ -1,4 +1,5 @@
 ﻿using CodeBase.Domain.PlayerInput;
+using DIContainer.Factory;
 using UnityEngine;
 
 namespace Domain.Player
@@ -6,17 +7,20 @@ namespace Domain.Player
     public class PlayerFactory : IPlayerFactory
     {
         private readonly Player _player;
-        private readonly Transform _transform;
 
-        public PlayerFactory(Player player, Transform transform)
+        public PlayerFactory(Player player)
         {
             _player = player;
-            _transform = transform;
         }
 
         public Player Create()
         {
-            return Player.Instantiate(_player, _transform);
+            return Player.Instantiate(_player);
+        }
+
+        public T Create<T>(T objectToCreate) where T : Object
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
