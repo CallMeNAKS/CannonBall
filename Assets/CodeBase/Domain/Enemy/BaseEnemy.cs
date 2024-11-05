@@ -17,13 +17,8 @@ namespace CodeBase.Domain.Enemy
 
         [SerializeField] private List<Transform> _projectilesPositions;
         
-        private Vector3 _defaultTransform;
+        private Vector3 _startPosition;
         
-        private void Awake()
-        {
-            _defaultTransform = transform.position;
-        }
-
         public override event Action<float> DamageTaken;
 
         public override void Attack()
@@ -33,6 +28,7 @@ namespace CodeBase.Domain.Enemy
         
         public override void Move()
         {
+            _startPosition = transform.position;
             MoveToRandomPosition();
         }
 
@@ -40,7 +36,7 @@ namespace CodeBase.Domain.Enemy
         {
             StopAllCoroutines();
             transform.DOKill();
-            transform.position = _defaultTransform;
+            transform.position = _startPosition;
         }
 
         private IEnumerator StartShooting()
@@ -49,11 +45,11 @@ namespace CodeBase.Domain.Enemy
             {
                 for (int i = 0; i < _projectilesPositions.Count; i++)
                 {
-                    _projectilesPositions[i].LookAt(_target.transform.position);
-                    Vector3 direction = _target.position + new Vector3(0, 1f, 0) - _projectilesPositions[i].position;
-                    AbstractProjectile projectile = _projectilesSource.GetTarget();
+                    _projectilesPositions[i].LookAt(Target.transform.position);
+                    Vector3 direction = Target.position + new Vector3(0, 1f, 0) - _projectilesPositions[i].position;
+                    AbstractProjectile projectile = ProjectilesSource.GetTarget();
                     projectile.transform.position = _projectilesPositions[i].position;
-                    projectile.ApplyPower(direction * _attackPower);
+                    projectile.ApplyPower(direction * AttackPower);
                     yield return new WaitForSeconds(2f);
                 }
             }
@@ -71,12 +67,12 @@ namespace CodeBase.Domain.Enemy
 
         public override void TakeDamage(float damage)
         {
-            if (_health > 0)
+            if (Health > 0)
             {
-                _health -= damage;
-                DamageTaken?.Invoke(_health);
+                Health -= damage;
+                DamageTaken?.Invoke(Health);
             }
-            if (_health <= 0)
+            if (Health <= 0)
             {
                 Death();
             }

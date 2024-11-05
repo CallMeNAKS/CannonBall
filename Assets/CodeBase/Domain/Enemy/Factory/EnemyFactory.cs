@@ -6,19 +6,17 @@ namespace CodeBase.Domain.Enemy.Factory
     public class EnemyFactory : IEnemyFactory
     {
         private readonly AbstractEnemy _enemyPrefab;
-        private readonly Transform _spawnPoint;
         private readonly AbstractProjectilesSource _projectilesSource;
 
-        public EnemyFactory(AbstractEnemy enemyPrefab, Transform spawnPoint, AbstractProjectilesSource projectilesSource)
+        public EnemyFactory(AbstractEnemy enemyPrefab, AbstractProjectilesSource projectilesSource)
         {
             _enemyPrefab = enemyPrefab;
-            _spawnPoint = spawnPoint;
             _projectilesSource = projectilesSource;
         }
         
         public AbstractEnemy Create(Transform player)
         {
-            AbstractEnemy enemyInstance = Object.Instantiate(_enemyPrefab, _spawnPoint.position, Quaternion.identity);
+            AbstractEnemy enemyInstance = Object.Instantiate(_enemyPrefab);
 
             enemyInstance.SetTarget(player);
             enemyInstance.SetProjectileSource(_projectilesSource);

@@ -8,16 +8,18 @@ namespace CodeBase.Domain.Enemy
     {
         [SerializeField] private Slider _slider;
         [SerializeField] private AbstractEnemy _abstractEnemy;
+
         private void OnEnable()
         {
             _abstractEnemy.DamageTaken += ChangeHealth;
-            _slider.maxValue = _abstractEnemy.Health;
-            _slider.value = _slider.maxValue;
+         
+            _slider.maxValue = _abstractEnemy.MaxHealth;
+            _slider.value = _abstractEnemy.Health;
         }
 
         private void ChangeHealth(float value)
         {
-             _slider.value = value;
+            _slider.value = value;
         }
 
         private void OnDisable()
