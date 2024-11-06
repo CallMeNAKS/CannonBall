@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Domain.Target;
 using Domain.Target.Source;
@@ -15,7 +16,7 @@ namespace CodeBase.Domain.Enemy
         private float _attackPower;
         private float _delay;
 
-        private bool _isShooting;
+        private CancellationTokenSource _cancellationTokenSource;
 
         public Shooter(Transform[] projectilesPositions, Transform target, AbstractProjectilesSource projectileSource, float attackPower, float delay)
         {
@@ -24,36 +25,54 @@ namespace CodeBase.Domain.Enemy
             _projectileSource = projectileSource;
             _attackPower = attackPower;
             _delay = delay;
+            _cancellationTokenSource = new CancellationTokenSource();
         }
 
         public async Task StartShooting()
         {
-            _isShooting = true;
-            
-            while (_isShooting)
+            _cancellationTokenSource = new CancellationTokenSource();
+            var token = _cancellationTokenSource.Token;
+
+            while (!token.IsCancellationRequested)
             {
                 foreach (var position in _projectilesPositions)
                 {
-                    position.LookAt(_target.position);
+                    if (token.IsCancellationRequested) break;
+
                     Vector3 direction = _target.position + new Vector3(0, 1f, 0) - position.position;
                     AbstractProjectile projectile = _projectileSource.GetTarget();
                     projectile.transform.position = position.position;
                     projectile.ApplyPower(direction * _attackPower);
-                    
-                    await Task.Delay(TimeSpan.FromSeconds(_delay));
-                    if(_isShooting == false) break;
+
+                    await Task.Delay(TimeSpan.FromSeconds(_delay), token);
                 }
             }
         }
 
         public async Task StartShootingSecond()
         {
-            Debug.Log("Ну прям жесткий растрел");
+            _cancellationTokenSource = new CancellationTokenSource();
+            var token = _cancellationTokenSource.Token;
+
+            while (!token.IsCancellationRequested)
+            {
+                foreach (var position in _projectilesPositions)
+                {
+                    if (token.IsCancellationRequested) break;
+
+                    Vector3 direction = _target.position + new Vector3(0, 1f, 0) - position.position;
+                    AbstractProjectile projectile = _projectileSource.GetTarget();
+                    projectile.transform.position = position.position;
+                    projectile.ApplyPower(direction * _attackPower);
+
+                    await Task.Delay(TimeSpan.FromSeconds(_delay / 2), token);
+                }
+            }
         }
 
         public void StopShooting()
         {
-            _isShooting = false;
+            _cancellationTokenSource.Cancel();
         }
     }
 }
