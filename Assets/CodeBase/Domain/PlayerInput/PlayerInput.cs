@@ -5,15 +5,14 @@ using UnityEngine;
 
 namespace CodeBase.Domain.PlayerInput
 {
-    public class PlayerInput : MonoBehaviour
+    public class PlayerInput : MonoBehaviour, IPlayerInput
     {
-        [SerializeField] private AbstractCannon _cannon;
-        [SerializeField] private AbstractAxisBases _axisBases;
-
         public event Action StartGameClicked;
         public event Action RestartGameClicked;
         public event Action RocketLaunced;
-        
+        public event Action Shooted;
+        public event Action<Vector2> CannonRotated;
+
         private bool _isGameStarted;
 
         private void Update()
@@ -28,11 +27,11 @@ namespace CodeBase.Domain.PlayerInput
             }
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                _cannon.Shoot();
+                Shooted?.Invoke();
             }
             if (Input.GetKeyDown(KeyCode.G))
             {
-                _cannon.RocketShoot();
+                RocketLaunced?.Invoke();
             }
 
             CannonRotationControl();
@@ -41,7 +40,7 @@ namespace CodeBase.Domain.PlayerInput
         private void CannonRotationControl()
         {
             var input = new Vector2(Input.GetAxis("Horizontal"), -Input.GetAxis("Vertical"));
-            _axisBases.Rotate(input * Time.deltaTime);
+            CannonRotated?.Invoke(input * Time.deltaTime);
         }
 
         private void StartGame()

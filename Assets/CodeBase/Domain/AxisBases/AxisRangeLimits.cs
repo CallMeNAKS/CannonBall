@@ -1,4 +1,5 @@
 using System;
+using Domain.Player;
 using UnityEngine;
 
 namespace CodeBase.Domain.AxisBases
@@ -7,10 +8,10 @@ namespace CodeBase.Domain.AxisBases
     {
         [SerializeField] private AbstractAxisBases _origin;
         [SerializeField] private AxisBases _axis;
-
+        
         [Header("Range Limits")] 
         [SerializeField] private Range _range;
-
+        
         public override void Rotate(Vector2 vector)
         {
             vector.y = _range.In(_axis.Current.y + vector.y) ? vector.y : 0;

@@ -1,26 +1,25 @@
 ﻿using CodeBase.Domain.PlayerInput;
-using DIContainer.Factory;
 using UnityEngine;
 
 namespace Domain.Player
 {
     public class PlayerFactory : IPlayerFactory
     {
-        private readonly Player _player;
+        private DIContainer.DIContainer _container;
+        private Player _player;
 
-        public PlayerFactory(Player player)
+        public PlayerFactory(DIContainer.DIContainer container, Player player)
         {
+            _container = container;
             _player = player;
         }
 
         public Player Create()
         {
-            return Player.Instantiate(_player);
-        }
-
-        public T Create<T>(T objectToCreate) where T : Object
-        {
-            throw new System.NotImplementedException();
+            var player =  Player.Instantiate(_player);
+            player.PlayerInput = _container.Resolve<IPlayerInput>();
+            
+            return player; 
         }
     }
 }

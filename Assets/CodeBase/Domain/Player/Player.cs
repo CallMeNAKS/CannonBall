@@ -1,4 +1,7 @@
 ﻿using System;
+using CodeBase.Domain.AxisBases;
+using CodeBase.Domain.Cannon;
+using CodeBase.Domain.PlayerInput;
 using Domain.Target;
 using UnityEngine;
 
@@ -9,10 +12,28 @@ namespace Domain.Player
     {
         public event Action<int> PlayerTookDamage;
         
+        private IPlayerInput _playerInput;
+        private bool _isInputSeted;
+
+        [SerializeField] private CannonInputListener _cannon;
+        [SerializeField] private AxisInputListener _axisBases;
+        
+
+        public IPlayerInput PlayerInput // Как сделать лучше??? 
+        {
+            set
+            {
+                if (_isInputSeted) return;
+                _playerInput = value;
+                _cannon.SunscribePlayerInput(_playerInput);
+                _axisBases.SunscribePlayerInput(_playerInput);
+            }
+        }
+        
         public event Action PlayerLost;
 
         [SerializeField] private int _health = 6;
-
+        
         private void OnEnable()
         {
             InvokeEvent();

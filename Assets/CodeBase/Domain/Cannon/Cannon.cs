@@ -2,6 +2,8 @@
 using System.Collections;
 using CodeBase.Domain.CannonBall;
 using CodeBase.Domain.CannonBall.Source;
+using CodeBase.Domain.PlayerInput;
+using Domain.Player;
 using Domain.Rocket;
 using UnityEngine;
 
@@ -12,13 +14,16 @@ namespace CodeBase.Domain.Cannon
         [SerializeField] private float _power;
         [SerializeField] private Transform _shootPoint;
         [SerializeField] private AbstractBallSource _ballSource;
+        [SerializeField] private Player _player;
+        
+        private IPlayerInput _playerInput;
         
         [Header("Rocket")]
         [SerializeField] private Rocket _rocket;
         [SerializeField] private float _reloadTime = 5f;
         private bool _isReloading = false;
         
-        public override event Action RocketShooted;
+        public event Action RocketShooted;
 
         private void Awake()
         {

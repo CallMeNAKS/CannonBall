@@ -7,7 +7,5 @@ namespace CodeBase.Domain.Cannon
     {
         public abstract void Shoot();
         public abstract void RocketShoot();
-
-        public abstract event Action RocketShooted;
     }
 }
