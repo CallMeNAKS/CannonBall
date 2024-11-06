@@ -1,4 +1,5 @@
 ﻿using System;
+using CodeBase.Domain.Enemy.State;
 using Domain.Target.Source;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -7,15 +8,28 @@ namespace CodeBase.Domain.Enemy
 {
     public abstract class AbstractEnemy : MonoBehaviour
     {
-        [SerializeField] private float _attackPower = 1f;
-        [SerializeField] private Transform _target;
-        [SerializeField] private AbstractProjectilesSource _projectilesSource;
+        [SerializeField] private Transform[] _projectilesPositions;
+        private Transform _target;
+        private AbstractProjectilesSource _projectilesSource;
 
         [SerializeField] private float _health = 100f;
         private float _maxHealth = 100f;
+        
+        [SerializeField] private float _attackPower = 1f;
+        [SerializeField] private float _fireRate = 2f;
 
+        private Shooter _shooter;
+        
         public abstract event Action<float> DamageTaken;
         public event Action OnDeath;
+
+        protected Transform[] ProjectilesPositions { get{ return _projectilesPositions; } }
+        protected float FireRate { get{return _fireRate;} }
+        protected Shooter Shooter
+        {
+            get { return _shooter; }
+            set { _shooter = value; }
+        }
 
         protected Transform Target
         {
@@ -47,10 +61,13 @@ namespace CodeBase.Domain.Enemy
                 }
             }
         }
-        
-        public float MaxHealth { get => _maxHealth; }
 
-        private void Awake()
+        public float MaxHealth
+        {
+            get => _maxHealth;
+        }
+
+        public void Awake()
         {
             _maxHealth = _health;
         }
@@ -65,10 +82,11 @@ namespace CodeBase.Domain.Enemy
             _projectilesSource = projectilesSource;
         }
 
-        public abstract void Attack();
+        public abstract void CreateShooter();
         public abstract void Move();
         public abstract void Reset();
         public abstract void TakeDamage(float damage);
+        public abstract void CreateStateMachine();
 
         protected void Death()
         {

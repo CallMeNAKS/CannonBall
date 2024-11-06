@@ -236,16 +236,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed837325b18c4d3f9b81f6b43f6eb27c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attackPower: 0.8
-  _target: {fileID: 0}
-  _projectilesSource: {fileID: 0}
-  _health: 11
-  _timeToChangePlace: 2
   _projectilesPositions:
   - {fileID: 7143425171545254514}
   - {fileID: 792273424243099948}
   - {fileID: 1229329143277594675}
   - {fileID: 1818312895941217237}
+  _health: 40
+  _attackPower: 0.8
+  _fireRate: 2
+  _timeToChangePlace: 2
 --- !u!1 &1248916312437835151
 GameObject:
   m_ObjectHideFlags: 0
@@ -1086,7 +1085,6 @@ GameObject:
   - component: {fileID: 4825792502039804952}
   - component: {fileID: 1583054881174041075}
   - component: {fileID: 7365577161910394463}
-  - component: {fileID: 1896701834405805649}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -1139,19 +1137,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1896701834405805649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7997929901401027169}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a476d2237b81440eaad0a1358c3ebc6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _abstractEnemy: {fileID: 2381652176562227482}
 --- !u!1 &8051687960089336260
 GameObject:
   m_ObjectHideFlags: 0

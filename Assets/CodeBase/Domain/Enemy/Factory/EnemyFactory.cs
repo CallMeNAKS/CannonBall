@@ -20,8 +20,9 @@ namespace CodeBase.Domain.Enemy.Factory
 
             enemyInstance.SetTarget(player);
             enemyInstance.SetProjectileSource(_projectilesSource);
+            enemyInstance.CreateShooter();
+            enemyInstance.CreateStateMachine();
             enemyInstance.Move();
-            enemyInstance.Attack();
             
             return enemyInstance;
         }
