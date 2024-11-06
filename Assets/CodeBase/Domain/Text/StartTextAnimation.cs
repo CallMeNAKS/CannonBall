@@ -6,15 +6,17 @@ using UnityEngine;
 
 namespace CodeBase.Domain.Text
 {
-    public class TextAnimation : MonoBehaviour
+    public class StartTextAnimation : MonoBehaviour, IStartState
     {
         [SerializeField] private float _transformMultiplier = 1.2f;
         [SerializeField] private float _animationDuration = 0.5f;
         [SerializeField] private Transform _textTransform;
+        
+        private Coroutine _textCoroutine;
 
-        private void OnEnable()
+        public void OnStartGame()
         {
-            StartCoroutine(TextAnimationCoroutine());
+            _textCoroutine = StartCoroutine(TextAnimationCoroutine());
         }
 
         private IEnumerator TextAnimationCoroutine()
@@ -29,9 +31,10 @@ namespace CodeBase.Domain.Text
             }
         }
 
-        private void OnDisable()
+        public void Exit()
         {
-            StopAllCoroutines();
+            StopCoroutine(_textCoroutine);
+            _textTransform.gameObject.SetActive(false);
         }
     }
 }

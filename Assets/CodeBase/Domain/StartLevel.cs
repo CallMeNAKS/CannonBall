@@ -1,5 +1,6 @@
 ﻿using CodeBase.Domain.Enemy;
 using CodeBase.Domain.Enemy.Factory;
+using CodeBase.Domain.PlayerInput;
 using CodeBase.Domain.Text;
 using DIContainer.Factory;
 using Domain.Player;
@@ -15,6 +16,7 @@ namespace DIContainer
 
         private Transform _playerSpawnPosition;
         private Player _playerPrefab = Resources.Load<Player>("Player/Cannon Player");
+        private PlayerInput _input = Resources.Load<PlayerInput>("Player/Input");
 
         private Transform _enemySpawnPosition;
         private AbstractEnemy _abstractEnemy = Resources.Load<AbstractEnemy>("Enemy/RobotEnemy");
@@ -22,7 +24,7 @@ namespace DIContainer
         private AbstractProjectilesSource
             _projectilesSource = Resources.Load<AbstractProjectilesSource>("Enemy/Source");
 
-        private TextAnimation _startText = Resources.Load<TextAnimation>("UI/StartText");
+        private StartTextAnimation _startText = Resources.Load<StartTextAnimation>("UI/StartText");
         private ScoreView _scoreView = Resources.Load<ScoreView>("UI/ScoreView");
         private HealthView _healthView = Resources.Load<HealthView>("UI/HealthView");
         private Domain.Shop.Shop _shopUI = Resources.Load<Domain.Shop.Shop>("UI/Shop");
@@ -37,9 +39,16 @@ namespace DIContainer
         public void InitializeLevel()
         {
             RegisterFactories();
+            RegisterInput();
             RegisterInstances();
             InitializeUI();
             RegisterGameState();
+        }
+
+        private void RegisterInput()
+        {
+            var playerInput = CreateByFactory(_input);
+            _container.RegisterSingleton<IPlayerInput>(c => playerInput);
         }
 
         private void RegisterFactories()
@@ -48,50 +57,14 @@ namespace DIContainer
             ProjectilesSourceRegistration();
 
             _container.RegisterSingleton<IPlayerFactory>(
-                c => new PlayerFactory(_playerPrefab));
+                c => new PlayerFactory(_container, _playerPrefab));
             _container.RegisterSingleton<IEnemyFactory>(
                 c => new EnemyFactory(_abstractEnemy, _container.Resolve<AbstractProjectilesSource>()));
         }
 
-        private void RegisterInstances()
+        private void FactoryRegistration()
         {
-            var playerInstance = _container.Resolve<IPlayerFactory>().Create();
-            playerInstance.transform.position = _playerSpawnPosition.position;
-
-            var enemyInstance = _container.Resolve<IEnemyFactory>().Create(playerInstance.transform);
-            enemyInstance.transform.position = _enemySpawnPosition.position;
-            enemyInstance.Move();
-
-
-            _container.RegisterInstance("Player", playerInstance);
-            _container.RegisterInstance("Enemy", enemyInstance);
-        }
-
-        private void InitializeUI()
-        {
-            var scoreView = CreateAndRegisterUIComponent(_scoreView);
-            scoreView.SetProjectilesListener(_container.Resolve<IProjectileEventService>());
-
-            var healthView = CreateAndRegisterUIComponent(_healthView);
-            healthView.SetPlayerService(_container.Resolve<Player>("Player"));
-
-            var shopUI = CreateAndRegisterUIComponent(_shopUI);
-            shopUI.OfflineShop();
-            _container.RegisterInstance(shopUI);
-        }
-
-        private T CreateAndRegisterUIComponent<T>(T prefab) where T : Component
-        {
-            return _container.Resolve<IFactory>().Create(prefab);
-        }
-
-        private void RegisterGameState()
-        {
-            _container.RegisterSingleton<GameState>(c =>
-                new GameState(
-                    _container.Resolve<Domain.Shop.Shop>(),
-                    _container.Resolve<Player>("Player"),
-                    _container.Resolve<AbstractEnemy>("Enemy")));
+            _container.RegisterSingleton<IFactory>(c => new GenericFactory());
         }
 
         private void ProjectilesSourceRegistration()
@@ -104,9 +77,49 @@ namespace DIContainer
             _container.RegisterSingleton<IProjectileEventService>(c => projectileEventService);
         }
 
-        private void FactoryRegistration()
+        private void RegisterInstances()
         {
-            _container.RegisterSingleton<IFactory>(c => new GenericFactory());
+            var playerInstance = _container.Resolve<IPlayerFactory>().Create();
+            playerInstance.transform.position = _playerSpawnPosition.position;
+
+            var enemyInstance = _container.Resolve<IEnemyFactory>().Create(playerInstance.transform);
+            enemyInstance.transform.position = _enemySpawnPosition.position;
+
+
+            _container.RegisterInstance("Player", playerInstance);
+            _container.RegisterInstance("Enemy", enemyInstance);
+        }
+
+        private void InitializeUI()
+        {
+            IStartState startUI = CreateByFactory(_startText);
+            _container.RegisterInstance(startUI);
+            
+            var scoreView = CreateByFactory(_scoreView);
+            scoreView.SetProjectilesListener(_container.Resolve<IProjectileEventService>());
+
+            var healthView = CreateByFactory(_healthView);
+            healthView.SetPlayerService(_container.Resolve<Player>("Player"));
+
+            var shopUI = CreateByFactory(_shopUI);
+            shopUI.OfflineShop();
+            _container.RegisterInstance(shopUI);
+        }
+
+        private T CreateByFactory<T>(T prefab) where T : Component
+        {
+            return _container.Resolve<IFactory>().Create(prefab);
+        }
+
+        private void RegisterGameState()
+        {
+            _container.RegisterSingleton<GameState>(c =>
+                new GameState(
+                    _container.Resolve<Domain.Shop.Shop>(),
+                    _container.Resolve<Player>("Player"),
+                    _container.Resolve<AbstractEnemy>("Enemy"),
+                    _container.Resolve<IPlayerInput>(),
+                    _container.Resolve<IStartState>()));
         }
     }
 }

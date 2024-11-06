@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace CodeBase.Domain.Enemy
 {
-    public abstract class AbstractEnemy : MonoBehaviour
+    public abstract class AbstractEnemy : MonoBehaviour //TO DO TODO
     {
         [SerializeField] private Transform[] _projectilesPositions;
         private Transform _target;

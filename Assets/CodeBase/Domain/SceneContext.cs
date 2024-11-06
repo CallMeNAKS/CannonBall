@@ -29,6 +29,7 @@ namespace DIContainer
         {
             var gameState = _container.Resolve<GameState>();
             gameState.Initialize();
+            gameState.StartGame();
         }
     }
 }
