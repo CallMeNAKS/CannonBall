@@ -18,11 +18,10 @@ namespace CodeBase.Domain.Enemy
             MaxHealth = _health;
         }
 
-
         public void TakeDamage(float damage)
         {
             _health -= damage;
-            
+
             if (_health >= 0)
             {
                 DamageTaken?.Invoke(_health);
@@ -32,7 +31,7 @@ namespace CodeBase.Domain.Enemy
                     HealthReducedHalf?.Invoke();
                 }
             }
-            
+
             if (_health <= 0)
             {
                 HealthEnded?.Invoke();

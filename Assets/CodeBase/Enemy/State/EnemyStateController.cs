@@ -37,10 +37,4 @@ namespace CodeBase.Domain.Enemy.State
             return state;
         }
     }
-
-    public interface IStateMachine
-    {
-        public void Enter(EnemyState stateType);
-        public void RegisterState(EnemyState stateType, IState state);
-    }
 }

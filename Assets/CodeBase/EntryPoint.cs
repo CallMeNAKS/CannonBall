@@ -12,6 +12,7 @@ public class EntryPoint : MonoBehaviour
     private void Awake()
     {
         _container = new DIContainer.DIContainer();
+        
         LevelRegister();
         InitializeGame();
     }

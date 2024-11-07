@@ -23,7 +23,11 @@ namespace Domain.Player
         {
             set
             {
-                if (_isInputSeted) return;
+                if (_isInputSeted)
+                {
+                    Debug.LogError("Input is sets");
+                    return;
+                }
                 _playerInput = value;
                 _cannon.SunscribePlayerInput(_playerInput);
                 _axisBases.SunscribePlayerInput(_playerInput);
