@@ -7,14 +7,14 @@ namespace CodeBase.Domain.Enemy
     public class EnemyHealthView : MonoBehaviour
     {
         [SerializeField] private Slider _slider;
-        [SerializeField] private AbstractEnemy _abstractEnemy;
+        [SerializeField] private Health _health;
 
         private void OnEnable()
         {
-            _abstractEnemy.DamageTaken += ChangeHealth;
+            _health.DamageTaken += ChangeHealth;
          
-            _slider.maxValue = _abstractEnemy.MaxHealth;
-            _slider.value = _abstractEnemy.Health;
+            _slider.maxValue = _health.MaxHealth;
+            _slider.value = _health.MaxHealth;
         }
 
         private void ChangeHealth(float value)
@@ -24,7 +24,7 @@ namespace CodeBase.Domain.Enemy
 
         private void OnDisable()
         {
-            _abstractEnemy.DamageTaken -= ChangeHealth;
+            _health.DamageTaken -= ChangeHealth;
         }
     }
 }

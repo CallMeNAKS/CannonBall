@@ -8,24 +8,21 @@ using UnityEngine;
 
 namespace CodeBase.Domain.Enemy
 {
-    public class Shooter : IShooter
+    public class Shooter : MonoBehaviour, IShooter
     {
-        private Transform[] _projectilesPositions;
+        [SerializeField] private Transform[] _projectilesPositions;
+        [SerializeField] private float _attackPower;
+        [SerializeField] private float _delay;
+
         private Transform _target;
         private AbstractProjectilesSource _projectileSource;
-        private float _attackPower;
-        private float _delay;
 
         private CancellationTokenSource _cancellationTokenSource;
 
-        public Shooter(Transform[] projectilesPositions, Transform target, AbstractProjectilesSource projectileSource, float attackPower, float delay)
+        public void Init(Transform target, AbstractProjectilesSource projectileSource)
         {
-            _projectilesPositions = projectilesPositions;
             _target = target;
             _projectileSource = projectileSource;
-            _attackPower = attackPower;
-            _delay = delay;
-            _cancellationTokenSource = new CancellationTokenSource();
         }
 
         public async Task StartShooting()
