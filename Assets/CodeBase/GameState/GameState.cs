@@ -41,7 +41,6 @@ namespace GameState
         {
             _onStartComponent.Exit();
             _enemy.CreateStateMachine();
-            _enemy.Move();
         }
 
         private void OnEnemyDeath()
