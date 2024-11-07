@@ -16,11 +16,9 @@ namespace CodeBase.Domain.Enemy.Factory
         
         public AbstractEnemy Create(Transform player)
         {
-            AbstractEnemy enemyInstance = Object.Instantiate(_enemyPrefab);
+            AbstractEnemy enemyInstance = Object.Instantiate(_enemyPrefab); 
 
-            enemyInstance.SetTarget(player);
-            enemyInstance.SetProjectileSource(_projectilesSource);
-            enemyInstance.CreateShooter();
+            enemyInstance.Init(player, _projectilesSource);
             
             return enemyInstance;
         }

@@ -2,24 +2,26 @@
 using CodeBase.Domain.PlayerInput;
 using CodeBase.Domain.Text;
 using Domain.Player;
+using Domain.Shop;
 
-namespace DIContainer
+namespace GameState
 {
     public class GameState
     {
-        private Domain.Shop.Shop _shop;
+        private Shop _shop;
         private Player _player;
         private AbstractEnemy _enemy;
         private IPlayerInput _playerInput;
-        private IStartState _startComponent;
+        private IOnStartState _onStartComponent;
 
-        public GameState(Domain.Shop.Shop shop, Player player, AbstractEnemy enemy, IPlayerInput playerInput, IStartState startComponent)
+        public GameState(Shop shop, Player player, AbstractEnemy enemy, IPlayerInput playerInput,
+            IOnStartState onStartComponent)
         {
             _shop = shop;
             _player = player;
             _enemy = enemy;
             _playerInput = playerInput;
-            _startComponent = startComponent;
+            _onStartComponent = onStartComponent;
         }
 
         public void Initialize()
@@ -32,19 +34,19 @@ namespace DIContainer
 
         public void StartGame()
         {
-            _startComponent.OnStartGame();
+            _onStartComponent.OnStartGame();
         }
 
         private void StartPlayMode()
         {
-            _startComponent.Exit();
+            _onStartComponent.Exit();
             _enemy.CreateStateMachine();
             _enemy.Move();
         }
 
         private void OnEnemyDeath()
         {
-              _shop.OpenShop();
+            _shop.OpenShop();
         }
 
         private void OnPlayerLost()
@@ -65,4 +67,4 @@ namespace DIContainer
             _playerInput.StartGameClicked -= StartGame;
         }
     }
-}    
+}

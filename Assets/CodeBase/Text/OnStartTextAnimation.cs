@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace CodeBase.Domain.Text
 {
-    public class StartTextAnimation : MonoBehaviour, IStartState
+    public class OnStartTextAnimation : MonoBehaviour, IOnStartState
     {
         [SerializeField] private float _transformMultiplier = 1.2f;
         [SerializeField] private float _animationDuration = 0.5f;

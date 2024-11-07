@@ -8,28 +8,28 @@ using Domain.Target.Source;
 using Domain.UI;
 using UnityEngine;
 
-namespace DIContainer
+namespace Level
 {
     public class StartLevel
     {
-        private DIContainer _container;
+        private readonly DIContainer.DIContainer _container;
 
-        private Transform _playerSpawnPosition;
-        private Player _playerPrefab = Resources.Load<Player>("Player/Cannon Player");
-        private PlayerInput _input = Resources.Load<PlayerInput>("Player/Input");
+        private readonly Transform _playerSpawnPosition;
+        private readonly Player _playerPrefab = Resources.Load<Player>("Player/Cannon Player");
+        private readonly PlayerInput _input = Resources.Load<PlayerInput>("Player/Input");
 
-        private Transform _enemySpawnPosition;
-        private AbstractEnemy _abstractEnemy = Resources.Load<AbstractEnemy>("Enemy/RobotEnemy");
+        private readonly Transform _enemySpawnPosition;
+        private readonly AbstractEnemy _abstractEnemy = Resources.Load<AbstractEnemy>("Enemy/RobotEnemy");
 
-        private AbstractProjectilesSource
+        private readonly AbstractProjectilesSource
             _projectilesSource = Resources.Load<AbstractProjectilesSource>("Enemy/Source");
 
-        private StartTextAnimation _startText = Resources.Load<StartTextAnimation>("UI/StartText");
-        private ScoreView _scoreView = Resources.Load<ScoreView>("UI/ScoreView");
-        private HealthView _healthView = Resources.Load<HealthView>("UI/HealthView");
-        private Domain.Shop.Shop _shopUI = Resources.Load<Domain.Shop.Shop>("UI/Shop");
+        private readonly OnStartTextAnimation _onStartText = Resources.Load<OnStartTextAnimation>("UI/StartText");
+        private readonly ScoreView _scoreView = Resources.Load<ScoreView>("UI/ScoreView");
+        private readonly HealthView _healthView = Resources.Load<HealthView>("UI/HealthView");
+        private readonly Domain.Shop.Shop _shopUI = Resources.Load<Domain.Shop.Shop>("UI/Shop");
 
-        public StartLevel(DIContainer container, Transform playerSpawnPosition, Transform enemySpawnPosition)
+        public StartLevel(DIContainer.DIContainer container, Transform playerSpawnPosition, Transform enemySpawnPosition)
         {
             _container = container;
             _playerSpawnPosition = playerSpawnPosition;
@@ -92,9 +92,9 @@ namespace DIContainer
 
         private void InitializeUI()
         {
-            IStartState startUI = CreateByFactory(_startText);
-            _container.RegisterInstance(startUI);
-            
+            IOnStartState onStartUI = CreateByFactory(_onStartText);
+            _container.RegisterInstance(onStartUI);
+
             var scoreView = CreateByFactory(_scoreView);
             scoreView.SetProjectilesListener(_container.Resolve<IProjectileEventService>());
 
@@ -113,13 +113,13 @@ namespace DIContainer
 
         private void RegisterGameState()
         {
-            _container.RegisterSingleton<GameState>(c =>
-                new GameState(
+            _container.RegisterSingleton<GameState.GameState>(c =>
+                new GameState.GameState(
                     _container.Resolve<Domain.Shop.Shop>(),
                     _container.Resolve<Player>("Player"),
                     _container.Resolve<AbstractEnemy>("Enemy"),
                     _container.Resolve<IPlayerInput>(),
-                    _container.Resolve<IStartState>()));
+                    _container.Resolve<IOnStartState>()));
         }
     }
 }

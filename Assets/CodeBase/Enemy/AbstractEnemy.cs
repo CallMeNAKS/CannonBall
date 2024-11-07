@@ -1,12 +1,10 @@
 ﻿using System;
-using CodeBase.Domain.Enemy.State;
 using Domain.Target.Source;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace CodeBase.Domain.Enemy
 {
-    public abstract class AbstractEnemy : MonoBehaviour //TO DO TODO
+    public abstract class AbstractEnemy : MonoBehaviour //TODO разгрузить класс
     {
         [SerializeField] private Transform[] _projectilesPositions;
         private Transform _target;
@@ -72,14 +70,11 @@ namespace CodeBase.Domain.Enemy
             _maxHealth = _health;
         }
 
-        public void SetTarget(Transform target)
+        public void Init(Transform target, AbstractProjectilesSource projectilesSource)
         {
             _target = target;
-        }
-
-        public void SetProjectileSource(AbstractProjectilesSource projectilesSource)
-        {
             _projectilesSource = projectilesSource;
+            CreateShooter();
         }
 
         public abstract void CreateShooter();
@@ -93,4 +88,6 @@ namespace CodeBase.Domain.Enemy
             OnDeath?.Invoke();
         }
     }
+    
+    
 }
