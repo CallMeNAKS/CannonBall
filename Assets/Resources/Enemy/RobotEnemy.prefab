@@ -198,6 +198,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8260331204783650204}
   - component: {fileID: 2381652176562227482}
+  - component: {fileID: 4324831882321570023}
+  - component: {fileID: 2967956850265046491}
+  - component: {fileID: 6816872930153135479}
   m_Layer: 0
   m_Name: RobotEnemy
   m_TagString: Untagged
@@ -236,14 +239,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed837325b18c4d3f9b81f6b43f6eb27c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4324831882321570023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 428417937084385386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24b31d6d8c854e50930c4ed480acccb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 20
+--- !u!114 &2967956850265046491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 428417937084385386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 666f7609581645e89273581152449730, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _projectilesPositions:
   - {fileID: 7143425171545254514}
   - {fileID: 792273424243099948}
   - {fileID: 1229329143277594675}
   - {fileID: 1818312895941217237}
-  _health: 40
   _attackPower: 0.8
-  _fireRate: 2
+  _delay: 2
+--- !u!114 &6816872930153135479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 428417937084385386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdf4b0a923754cb08605a15a69624046, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _timeToChangePlace: 2
 --- !u!1 &1248916312437835151
 GameObject:
@@ -1457,6 +1496,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8260331204783650204}
     m_Modifications:
+    - target: {fileID: 2798851296524946154, guid: a99f1d18d37c12849ba77f2518d566ee, type: 3}
+      propertyPath: _health
+      value: 
+      objectReference: {fileID: 4324831882321570023}
     - target: {fileID: 2798851296524946154, guid: a99f1d18d37c12849ba77f2518d566ee, type: 3}
       propertyPath: _abstractEnemy
       value: 

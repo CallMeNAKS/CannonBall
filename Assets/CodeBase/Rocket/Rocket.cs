@@ -29,7 +29,7 @@ namespace Domain.Rocket
 
         private void OnCollisionEnter(Collision other)
         {
-            var enemy = other.gameObject.GetComponentInParent<AbstractEnemy>();
+            var enemy = other.gameObject.GetComponentInParent<Health>();
 
             if (enemy)
             {

@@ -1,74 +1,35 @@
 ﻿using System;
 using CodeBase.Domain.Enemy.State;
 using DG.Tweening;
-using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace CodeBase.Domain.Enemy
 {
     public class BaseEnemy : AbstractEnemy
     {
-        [SerializeField] private float _timeToChangePlace = 2f;
-
-        private Vector3 _startPosition;
         private IStateMachine _stateController;
-
         private EnemyState _currentState;
 
-        public override event Action<float> DamageTaken;
-
-        public override void CreateShooter()
+        private void OnEnable()
         {
-            Shooter = new Shooter(ProjectilesPositions, Target, ProjectilesSource, AttackPower, FireRate);
+            HealthComponent.HealthReducedHalf += StartSecondState;
+            HealthComponent.HealthEnded += StartLooseState;
         }
 
-        public override void Move()
+        private void StartSecondState()
         {
-            _startPosition = transform.position;
-            MoveToRandomPosition();
+            ChangeState(EnemyState.SecondFight);
+        }
+
+        private void StartLooseState()
+        {
+            ChangeState(EnemyState.Loose);
         }
 
         public override void Reset()
         {
             StopAllCoroutines();
             transform.DOKill();
-            transform.position = _startPosition;
             Shooter.StopShooting();
-        }
-
-        private void MoveToRandomPosition()
-        {
-            float randomX = Random.Range(-10f, 10f);
-            float randomY = Random.Range(3f, 10f);
-
-            Vector3 targetPosition = new Vector3(randomX, randomY, transform.position.z);
-
-            transform.DOMove(targetPosition, _timeToChangePlace).OnComplete(MoveToRandomPosition);
-        }
-
-        public override void TakeDamage(float damage)
-        {
-            if (Health > 0)
-            {
-                Health -= damage;
-                
-                if (Health > MaxHealth / 2)
-                {
-                    ChangeState(EnemyState.Fight);
-                }
-                else
-                {
-                    ChangeState(EnemyState.SecondFight);
-                }
-
-                DamageTaken?.Invoke(Health);
-            }
-
-            if (Health <= 0)
-            {
-                ChangeState(EnemyState.Loose);
-                Death();
-            }
         }
 
         private void ChangeState(EnemyState state)
@@ -85,20 +46,26 @@ namespace CodeBase.Domain.Enemy
 
             RegisterStates();
 
-            _stateController.Enter(EnemyState.Start);
+            _stateController.Enter(EnemyState.Fight);
         }
 
         private void RegisterStates()
         {
             var startState = new StartState();
-            var fightState = new FightState(Shooter);
-            var secondFightState = new SecondFightState(Shooter);
+            var fightState = new FightState(Shooter, Mover);
+            var secondFightState = new SecondFightState(Shooter, Mover);
             var looseStage = new LooseStage();
 
             _stateController.RegisterState(EnemyState.Start, startState);
             _stateController.RegisterState(EnemyState.Fight, fightState);
             _stateController.RegisterState(EnemyState.SecondFight, secondFightState);
             _stateController.RegisterState(EnemyState.Loose, looseStage);
+        }
+
+        private void OnDisable()
+        {
+            HealthComponent.HealthReducedHalf -= StartSecondState;
+            HealthComponent.HealthEnded -= StartLooseState;
         }
     }
 }
