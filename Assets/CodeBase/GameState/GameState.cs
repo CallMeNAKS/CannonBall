@@ -3,6 +3,8 @@ using CodeBase.Domain.PlayerInput;
 using CodeBase.Domain.Text;
 using Domain.Player;
 using Domain.Shop;
+using UnityEngine;
+using Cursor = UnityEngine.Cursor;
 
 namespace GameState
 {
@@ -41,11 +43,16 @@ namespace GameState
         {
             _onStartComponent.Exit();
             _enemy.CreateStateMachine();
+            
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
 
         private void OnEnemyDeath()
         {
             _shop.OpenShop();
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
 
         private void OnPlayerLost()

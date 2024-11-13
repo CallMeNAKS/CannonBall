@@ -1,4 +1,6 @@
 ﻿using System;
+using CodeBase.Money;
+using CodeBase.Shop;
 using UnityEngine;
 
 namespace Domain.Shop
@@ -6,22 +8,27 @@ namespace Domain.Shop
     public class Shop : MonoBehaviour
     {
         [SerializeField] private GameObject[] shopItems;
+        [SerializeField] private CardSelectionPanel _cardSelectionPanel;
+        public MoneyBank MoneyBank { get; private set; }
         
         public event Action EndShoping;
 
-        public void OfflineShop()
+        public void OpenShop()
         {
-            foreach (var item in shopItems)
-            {
-                item.SetActive(false);
-            }
+            ToggleShopState(true);
+            _cardSelectionPanel.DrawCards();
         }
 
-        public void OpenShop()
+        public void CloseShop()
+        {
+            ToggleShopState(false);
+        }
+
+        private void ToggleShopState(bool state)
         {
             foreach (var shopItem in shopItems)
             {
-                shopItem.SetActive(true);
+                shopItem.SetActive(state);
             }
         }
     }

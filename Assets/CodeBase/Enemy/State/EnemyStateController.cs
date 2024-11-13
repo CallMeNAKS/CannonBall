@@ -17,6 +17,9 @@ namespace CodeBase.Domain.Enemy.State
         
         public void Enter(EnemyState stateType)
         {
+            if (_registeredStates[stateType] == _currentState) //TODO 
+                return;
+            
             IState newState = ChangeState(stateType);
             newState.Enter();
         }

@@ -12,12 +12,6 @@ namespace CodeBase.Domain.PlayerInput
         public event Action<Vector2> CannonRotated;
 
         private bool _isGameStarted;
-
-        private void Start()
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
         
         private void Update()
         {
