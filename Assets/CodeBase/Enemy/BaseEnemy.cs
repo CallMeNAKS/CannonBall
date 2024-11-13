@@ -1,13 +1,12 @@
-﻿using System;
-using CodeBase.Domain.Enemy.State;
+﻿using CodeBase.Domain.Enemy.State;
 using DG.Tweening;
 
 namespace CodeBase.Domain.Enemy
 {
     public class BaseEnemy : AbstractEnemy
     {
-        private IStateMachine _stateController;
-        private EnemyState _currentState;
+        private IStateMachine _stateController; // поменять
+        private EnemyState _currentState; // убрать 
 
         private void OnEnable()
         {
@@ -23,6 +22,7 @@ namespace CodeBase.Domain.Enemy
         private void StartLooseState()
         {
             ChangeState(EnemyState.Loose);
+            Death();
         }
 
         public override void Reset()

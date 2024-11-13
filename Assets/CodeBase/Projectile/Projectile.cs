@@ -12,6 +12,8 @@ namespace Domain.Target
         private Rigidbody _rigidbody;
         private MeshRenderer _meshRenderer;
         private Material _defaultMaterial;
+
+        private int _changedScore;
         
         [Header("Material")]
         [SerializeField] private Material _newMaterial;
@@ -30,6 +32,12 @@ namespace Domain.Target
             _defaultMaterial = _meshRenderer.material;
         }
 
+        private void OnEnable()
+        {
+            transform.DOScale(_targetScale, _scaleSpeed).SetEase(Ease.InOutSine);
+            _changedScore = _score;
+        }
+
         public override void ApplyPower(Vector3 force)
         {
             _rigidbody.AddForce(force, ForceMode.VelocityChange);
@@ -40,9 +48,10 @@ namespace Domain.Target
             Ball ball = collision.gameObject.GetComponent<Ball>();
             if (ball)
             {
-                Hit?.Invoke(_score);
+                Hit?.Invoke(_changedScore);
                 ChangeColor();
                 ChangeScale();
+                _changedScore++;
             }
         }
 
@@ -64,11 +73,6 @@ namespace Domain.Target
             _meshRenderer.material = newColor;
         }
 
-        private void OnEnable()
-        {
-            transform.DOScale(_targetScale, _scaleSpeed).SetEase(Ease.InOutSine);
-        }
-
         private void OnDisable()
         {
             transform.DOKill();
@@ -77,6 +81,7 @@ namespace Domain.Target
             _meshRenderer.material = _defaultMaterial;
             _rigidbody.velocity = Vector3.zero;
             Disabled?.Invoke(this);
+            _changedScore = 0;
         }
     }
 }

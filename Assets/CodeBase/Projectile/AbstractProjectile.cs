@@ -6,7 +6,7 @@ namespace Domain.Target
 {
     public abstract class AbstractProjectile : MonoBehaviour
     {
-        [SerializeField] protected int _score;
+        [SerializeField] protected int _score = 2;
 
         public abstract event Action<int> Hit;
         public abstract event Action<AbstractProjectile> Disabled;

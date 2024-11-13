@@ -14,9 +14,9 @@ namespace Level
     {
         private readonly DIContainer.DIContainer _container;
 
-        private readonly Transform _playerSpawnPosition;
+        private readonly Transform _playerSpawnPosition; //TODO аддресебалс
         private readonly Player _playerPrefab = Resources.Load<Player>("Player/Cannon Player");
-        private readonly PlayerInput _input = Resources.Load<PlayerInput>("Player/Input");
+        private readonly MouthPlayerInput _input = Resources.Load<MouthPlayerInput>("Player/MouthInput");
 
         private readonly Transform _enemySpawnPosition;
         private readonly AbstractEnemy _abstractEnemy = Resources.Load<AbstractEnemy>("Enemy/RobotEnemy");
@@ -71,10 +71,12 @@ namespace Level
         {
             AbstractProjectilesSource projectileSourceService =
                 _container.Resolve<IFactory>().Create(_projectilesSource);
-            _container.RegisterSingleton<AbstractProjectilesSource>(c => projectileSourceService);
 
             var projectileEventService = projectileSourceService.GetComponent<IProjectileEventService>();
-            _container.RegisterSingleton<IProjectileEventService>(c => projectileEventService);
+            _container.RegisterSingleton(c => projectileEventService);
+
+            var projectileFactory = projectileEventService as AbstractProjectilesSource;
+            _container.RegisterSingleton<AbstractProjectilesSource>(c => projectileFactory);
         }
 
         private void RegisterInstances()
@@ -102,7 +104,7 @@ namespace Level
             healthView.SetPlayerService(_container.Resolve<Player>("Player"));
 
             var shopUI = CreateByFactory(_shopUI);
-            shopUI.OfflineShop();
+            shopUI.CloseShop();
             _container.RegisterInstance(shopUI);
         }
 

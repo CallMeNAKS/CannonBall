@@ -295,8 +295,9 @@ MonoBehaviour:
   _shootPoint: {fileID: 2568846191647915637}
   _ballSource: {fileID: 2568846192600860504}
   _player: {fileID: 7793502239335090124}
+  _ballReloadTime: 0.1
   _rocket: {fileID: 4087091262534014339, guid: e4f76f0bb040d3f4a86a1a321f433ec3, type: 3}
-  _reloadTime: 5
+  _rocketReloadTime: 5
 --- !u!114 &6355671515240840257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -724,7 +725,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _axis: {fileID: 2568846192126906494}
-  _cofficient: {x: 50, y: 30}
+  _cofficient: {x: 50, y: 50}
 --- !u!114 &495183586753872605
 MonoBehaviour:
   m_ObjectHideFlags: 0

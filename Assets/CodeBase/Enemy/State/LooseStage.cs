@@ -6,12 +6,12 @@ namespace CodeBase.Domain.Enemy.State
     {
         public void Enter()
         {
-            UnityEngine.Debug.Log("О нет как я мог проиграть, взрываюсь и падаю");
+            Debug.Log("О нет как я мог проиграть, взрываюсь и падаю");
         }
 
         public void Execute()
         {
-            UnityEngine.Debug.Log("Падаю");
+            Debug.Log("Падаю");
         }
 
         public void Exit()

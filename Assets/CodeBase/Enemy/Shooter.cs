@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Domain.Target;
 using Domain.Target.Source;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace CodeBase.Domain.Enemy
 {
@@ -12,7 +13,7 @@ namespace CodeBase.Domain.Enemy
     {
         [SerializeField] private Transform[] _projectilesPositions;
         [SerializeField] private float _attackPower;
-        [SerializeField] private float _delay;
+        [SerializeField] private float _fireDelay = 0.5f;
 
         private Transform _target;
         private AbstractProjectilesSource _projectileSource;
@@ -41,7 +42,7 @@ namespace CodeBase.Domain.Enemy
                     projectile.transform.position = position.position;
                     projectile.ApplyPower(direction * _attackPower);
 
-                    await Task.Delay(TimeSpan.FromSeconds(_delay), token);
+                    await Task.Delay(TimeSpan.FromSeconds(_fireDelay), token);
                 }
             }
         }
@@ -62,7 +63,7 @@ namespace CodeBase.Domain.Enemy
                     projectile.transform.position = position.position;
                     projectile.ApplyPower(direction * _attackPower);
 
-                    await Task.Delay(TimeSpan.FromSeconds(_delay / 2), token);
+                    await Task.Delay(TimeSpan.FromSeconds(_fireDelay / 2), token);
                 }
             }
         }

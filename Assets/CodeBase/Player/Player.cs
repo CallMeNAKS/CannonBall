@@ -10,14 +10,16 @@ namespace Domain.Player
     [RequireComponent(typeof(BoxCollider))]
     public class Player : MonoBehaviour, IPlayerService
     {
-        public event Action<int> PlayerTookDamage;
-        
         private IPlayerInput _playerInput;
         private bool _isInputSeted;
 
         [SerializeField] private CannonInputListener _cannon;
         [SerializeField] private AxisInputListener _axisBases;
+        [SerializeField] private int _health = 6;
         
+        public event Action PlayerLost;
+        public event Action<int> PlayerTookDamage;
+
 
         public IPlayerInput PlayerInput // Как сделать лучше??? 
         {
@@ -33,11 +35,7 @@ namespace Domain.Player
                 _axisBases.SunscribePlayerInput(_playerInput);
             }
         }
-        
-        public event Action PlayerLost;
 
-        [SerializeField] private int _health = 6;
-        
         private void OnEnable()
         {
             InvokeEvent();

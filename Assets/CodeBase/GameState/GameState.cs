@@ -8,11 +8,11 @@ namespace GameState
 {
     public class GameState
     {
-        private Shop _shop;
-        private Player _player;
-        private AbstractEnemy _enemy;
-        private IPlayerInput _playerInput;
-        private IOnStartState _onStartComponent;
+        private readonly Shop _shop;
+        private readonly Player _player;
+        private readonly AbstractEnemy _enemy;
+        private readonly IPlayerInput _playerInput;
+        private readonly IOnStartState _onStartComponent;
 
         public GameState(Shop shop, Player player, AbstractEnemy enemy, IPlayerInput playerInput,
             IOnStartState onStartComponent)
@@ -26,7 +26,7 @@ namespace GameState
 
         public void Initialize()
         {
-            _shop.EndShoping += OnEndShoping;
+            _shop.EndShoping += OnEndShopping;
             _player.PlayerLost += OnPlayerLost;
             _enemy.OnDeath += OnEnemyDeath;
             _playerInput.StartGameClicked += StartPlayMode;
@@ -50,17 +50,16 @@ namespace GameState
 
         private void OnPlayerLost()
         {
-            throw new System.NotImplementedException();
         }
 
-        private void OnEndShoping()
+        private void OnEndShopping()
         {
             _shop.gameObject.SetActive(false);
         }
 
         public void EndGame()
         {
-            _shop.EndShoping -= OnEndShoping;
+            _shop.EndShoping -= OnEndShopping;
             _player.PlayerLost -= OnPlayerLost;
             _enemy.OnDeath -= OnEnemyDeath;
             _playerInput.StartGameClicked -= StartGame;

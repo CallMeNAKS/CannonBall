@@ -251,7 +251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24b31d6d8c854e50930c4ed480acccb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 20
+  _health: 1
 --- !u!114 &2967956850265046491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,7 +270,7 @@ MonoBehaviour:
   - {fileID: 1229329143277594675}
   - {fileID: 1818312895941217237}
   _attackPower: 0.8
-  _delay: 2
+  _fireDelay: 0.5
 --- !u!114 &6816872930153135479
 MonoBehaviour:
   m_ObjectHideFlags: 0

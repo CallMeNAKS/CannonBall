@@ -9,14 +9,11 @@ namespace Domain.Target.Source
     {
         [SerializeField] private AbstractProjectilesSource _source;
 
-        private AbstractProjectile _projectile;
-
         public event Action<int> OnHit;
 
         public override AbstractProjectile GetTarget()
         {
             AbstractProjectile projectile = _source.GetTarget();
-            _projectile = projectile;
             projectile.Hit += InvokeEvent;
             projectile.Disabled += Unsubscribe;
             return projectile;

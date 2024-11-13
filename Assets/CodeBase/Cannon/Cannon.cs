@@ -17,49 +17,58 @@ namespace CodeBase.Domain.Cannon
         [SerializeField] private Player _player;
         
         private IPlayerInput _playerInput;
-        
+
+        [SerializeField] private float _ballReloadTime = 0.1f;
+
         [Header("Rocket")]
         [SerializeField] private Rocket _rocket;
-        [SerializeField] private float _reloadTime = 5f;
-        private bool _isReloading = false;
+        [SerializeField] private float _rocketReloadTime = 5f;
+
+        private bool _canShootBall = true;
+        private bool _canShootRocket = true;
         
         public event Action RocketShooted;
 
         private void Awake()
         {
-            StartCoroutine(Timer());
+            StartCoroutine(ReloadRocket());
         }
 
         public override void Shoot()
         {
+            if (!_canShootBall) return;
+            
             Ball ball = _ballSource.New();
             ball.transform.position = _shootPoint.position;
             ball.ApplyPower(_shootPoint.forward * _power);
+            
+            _canShootBall = false;
+            StartCoroutine(ReloadBall());
         }
 
         public override void RocketShoot()
         {
-            if (_isReloading == false)
-                return;
+            if (!_canShootRocket) return;
+            
             RocketShooted?.Invoke();
-            StartCoroutine(Timer());
             var rocket = Instantiate(_rocket);
             rocket.transform.position = _shootPoint.position;
             rocket.ApplyPower(_shootPoint.forward * _power);
+            
+            _canShootRocket = false;
+            StartCoroutine(ReloadRocket());
         }
         
-        private IEnumerator Timer()
+        private IEnumerator ReloadBall()
         {
-            _isReloading = false;
-            var reloadTime = _reloadTime;
-    
-            while (reloadTime > 0)
-            {
-                yield return new WaitForSeconds(0.1f);
-                reloadTime -= 0.1f;
-            }
-    
-            _isReloading = true;
+            yield return new WaitForSeconds(_ballReloadTime);
+            _canShootBall = true;
+        }
+
+        private IEnumerator ReloadRocket()
+        {
+            yield return new WaitForSeconds(_rocketReloadTime);
+            _canShootRocket = true;
         }
     }
 }
