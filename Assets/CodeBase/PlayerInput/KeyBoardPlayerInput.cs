@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace CodeBase.Domain.PlayerInput
 {
-    public class PlayerInput : MonoBehaviour, IPlayerInput
+    public class KeyBoardPlayerInput : MonoBehaviour, IPlayerInput
     {
         public event Action StartGameClicked;
         public event Action RestartGameClicked;
@@ -21,14 +21,17 @@ namespace CodeBase.Domain.PlayerInput
             {
                 StartGame();
             }
+
             if (Input.GetKeyDown(KeyCode.R))
             {
                 RestartGame();
             }
+
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 Shooted?.Invoke();
             }
+
             if (Input.GetKeyDown(KeyCode.G))
             {
                 RocketLaunced?.Invoke();

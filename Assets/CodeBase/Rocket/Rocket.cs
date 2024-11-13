@@ -34,6 +34,7 @@ namespace Domain.Rocket
             if (enemy)
             {
                 enemy.TakeDamage(_damage);
+                gameObject.SetActive(false);
             }
         }
     }
