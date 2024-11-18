@@ -37,6 +37,7 @@ namespace GameState
         public void StartGame()
         {
             _onStartComponent.OnStartGame();
+            _shop.gameObject.SetActive(false);
         }
 
         private void StartPlayMode()
@@ -50,6 +51,7 @@ namespace GameState
 
         private void OnEnemyDeath()
         {
+            _shop.gameObject.SetActive(true);
             _shop.OpenShop();
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -62,6 +64,7 @@ namespace GameState
         private void OnEndShopping()
         {
             _shop.gameObject.SetActive(false);
+            StartPlayMode();
         }
 
         public void EndGame()

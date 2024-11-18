@@ -14,12 +14,9 @@ namespace Domain.Target
         private Material _defaultMaterial;
 
         private int _changedScore;
-        
-        [Header("Material")]
-        [SerializeField] private Material _newMaterial;
 
-        [Header("Scale")]
-        [SerializeField] private float _scaleSpeed = 1f;
+        [Header("Material")] [SerializeField] private Material _newMaterial;
+        [Header("Scale")] [SerializeField] private float _scaleSpeed = 1f;
         [SerializeField] private Vector3 _targetScale = new Vector3(2, 2, 2);
 
         public override event Action<int> Hit;

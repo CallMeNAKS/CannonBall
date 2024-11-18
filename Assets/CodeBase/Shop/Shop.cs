@@ -2,6 +2,7 @@
 using CodeBase.Money;
 using CodeBase.Shop;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Domain.Shop
 {
@@ -11,25 +12,28 @@ namespace Domain.Shop
         [SerializeField] private CardSelectionPanel _cardSelectionPanel;
         public MoneyBank MoneyBank { get; private set; }
         
+        [SerializeField] private Button _closeShopButton;
+        
         public event Action EndShoping;
+
+        private void OnEnable()
+        {
+            _closeShopButton.onClick.AddListener(CloseShop);
+        }
 
         public void OpenShop()
         {
-            ToggleShopState(true);
             _cardSelectionPanel.DrawCards();
         }
 
         public void CloseShop()
         {
-            ToggleShopState(false);
+            EndShoping?.Invoke();
         }
 
-        private void ToggleShopState(bool state)
+        private void OnDisable()
         {
-            foreach (var shopItem in shopItems)
-            {
-                shopItem.SetActive(state);
-            }
+            _closeShopButton.onClick.RemoveAllListeners();
         }
     }
 }

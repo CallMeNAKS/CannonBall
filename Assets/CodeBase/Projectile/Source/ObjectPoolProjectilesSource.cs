@@ -15,7 +15,6 @@ namespace Domain.Target.Source
         
         public delegate void OnTargetHit();
         public event OnTargetHit OnTargetHitEvent;
-
         
         public override AbstractProjectile GetTarget()
         {
@@ -59,6 +58,5 @@ namespace Domain.Target.Source
             _allTargets.Clear();
             _targetsQueue.Clear();
         }
-        
     }
 }

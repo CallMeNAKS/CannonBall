@@ -725,7 +725,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _axis: {fileID: 2568846192126906494}
-  _cofficient: {x: 50, y: 50}
+  _cofficient: {x: 100, y: 100}
 --- !u!114 &495183586753872605
 MonoBehaviour:
   m_ObjectHideFlags: 0

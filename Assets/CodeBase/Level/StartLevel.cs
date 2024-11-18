@@ -104,7 +104,6 @@ namespace Level
             healthView.SetPlayerService(_container.Resolve<Player>("Player"));
 
             var shopUI = CreateByFactory(_shopUI);
-            shopUI.CloseShop();
             _container.RegisterInstance(shopUI);
         }
 
