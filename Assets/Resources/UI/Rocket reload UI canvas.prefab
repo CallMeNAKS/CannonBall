@@ -251,3 +251,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rocketReloadView: {fileID: 3014710891379571320}
+  _playerInput: {fileID: 0}

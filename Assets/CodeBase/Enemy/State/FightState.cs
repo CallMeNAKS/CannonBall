@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using CodeBase.PostEffect;
+using UnityEngine;
 
 namespace CodeBase.Domain.Enemy.State
 {
@@ -6,15 +7,18 @@ namespace CodeBase.Domain.Enemy.State
     {
         private IShooter _shooter;
         private IMover _mover;
+        private readonly VolumeEffects _volumeEffects;
 
-        public FightState(IShooter shooter, IMover mover)
+        public FightState(IShooter shooter, IMover mover, VolumeEffects volumeEffects)
         {
             _shooter = shooter;
             _mover = mover;
+            _volumeEffects = volumeEffects;
         }
 
         public void Enter()
         {
+            _volumeEffects.DamageEffect();
             Debug.Log("Enter FightState");
             Execute();
         }

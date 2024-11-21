@@ -1,5 +1,7 @@
-﻿using Level;
+﻿using CodeBase.PostEffect;
+using Level;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class EntryPoint : MonoBehaviour
 {
@@ -8,6 +10,8 @@ public class EntryPoint : MonoBehaviour
 
     [Header("Player")] [SerializeField] private Transform _playerSpawnPosition;
     [Header("Enemy")] [SerializeField] private Transform _enemySpawnPosition;
+    
+    [SerializeField] private VolumeEffects _volume;
 
     private void Awake()
     {
@@ -19,7 +23,7 @@ public class EntryPoint : MonoBehaviour
 
     private void LevelRegister()
     {
-        _startLevel = new StartLevel(_container, _playerSpawnPosition, _enemySpawnPosition);
+        _startLevel = new StartLevel(_container, _playerSpawnPosition, _enemySpawnPosition, _volume);
         _startLevel.InitializeLevel();
     }
 

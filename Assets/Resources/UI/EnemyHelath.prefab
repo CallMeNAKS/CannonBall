@@ -433,7 +433,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _slider: {fileID: 3228220241116640957}
-  _abstractEnemy: {fileID: 0}
+  _health: {fileID: 0}
 --- !u!1 &9034580566922773267
 GameObject:
   m_ObjectHideFlags: 0

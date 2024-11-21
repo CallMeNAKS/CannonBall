@@ -10,7 +10,7 @@ namespace CodeBase.Domain.Enemy.State
         SecondFight,
         Loose
     }
-    public class EnemyStateController : IStateMachine
+    public class EnemyStateMachine : IStateMachine
     {
         private IState _currentState;
         private Dictionary<EnemyState, IState> _registeredStates = new();

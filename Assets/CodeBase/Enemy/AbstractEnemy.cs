@@ -1,4 +1,5 @@
 ﻿using System;
+using CodeBase.Domain.Enemy.State;
 using Domain.Target.Source;
 using UnityEngine;
 
@@ -8,13 +9,15 @@ namespace CodeBase.Domain.Enemy
     [RequireComponent(typeof(IShooter))]
     [RequireComponent(typeof(IMover))]
     [DisallowMultipleComponent]
-    public abstract class AbstractEnemy : MonoBehaviour //TODO разгрузить класс
+    public abstract class AbstractEnemy : MonoBehaviour
     {
         public event Action OnDeath;
 
-        protected IShooter Shooter { get; private set; }
         protected Health HealthComponent { get; private set; }
-        protected IMover Mover { get; private set; }
+        protected IStateMachine StateMachine { get; private set; }
+        public IShooter Shooter { get; private set; }
+        public IMover Mover { get; private set; }
+
 
         private void Awake()
         {
@@ -23,13 +26,15 @@ namespace CodeBase.Domain.Enemy
             Mover = GetComponent<IMover>();
         }
 
-        public void Init(Transform target, AbstractProjectilesSource projectilesSource)
+        public void Init(Transform target, AbstractProjectilesSource projectilesSource, IStateMachine stateMachine)
         {
+            StateMachine = stateMachine;
             Shooter.Init(target, projectilesSource);
         }
 
+        public abstract void StartIdleState();
+        public abstract void StartFighting();
         public abstract void Reset();
-        public abstract void CreateStateMachine();
 
         protected void Death()
         {

@@ -1,12 +1,16 @@
-﻿using CodeBase.Domain.Enemy;
+﻿using CodeBase.Configs;
+using CodeBase.Domain.Enemy;
 using CodeBase.Domain.Enemy.Factory;
+using CodeBase.Domain.Enemy.State;
 using CodeBase.Domain.PlayerInput;
 using CodeBase.Domain.Text;
+using CodeBase.PostEffect;
 using DIContainer.Factory;
 using Domain.Player;
 using Domain.Target.Source;
 using Domain.UI;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Level
 {
@@ -28,21 +32,39 @@ namespace Level
         private readonly ScoreView _scoreView = Resources.Load<ScoreView>("UI/ScoreView");
         private readonly HealthView _healthView = Resources.Load<HealthView>("UI/HealthView");
         private readonly Domain.Shop.Shop _shopUI = Resources.Load<Domain.Shop.Shop>("UI/Shop");
+        private readonly EnemyConfig _enemyConfig = Resources.Load<EnemyConfig>("Configs/Enemy/Robot");
+        private readonly VolumeEffects _volume;
 
-        public StartLevel(DIContainer.DIContainer container, Transform playerSpawnPosition, Transform enemySpawnPosition)
+        public StartLevel(DIContainer.DIContainer container, Transform playerSpawnPosition, Transform enemySpawnPosition, VolumeEffects volume)
         {
             _container = container;
             _playerSpawnPosition = playerSpawnPosition;
             _enemySpawnPosition = enemySpawnPosition;
+            _volume = volume;
         }
 
         public void InitializeLevel()
         {
             RegisterFactories();
             RegisterInput();
-            RegisterInstances();
+            InitializePlayer();
+            InitializeEnemy();
             InitializeUI();
             RegisterGameState();
+        }
+
+        private void InitializeEnemy()
+        {
+            var enemyInstance = _container.Resolve<IEnemyFactory>().Create(_container.Resolve<Player>("Player").transform);
+            enemyInstance.transform.position = _enemySpawnPosition.position;
+            _container.RegisterInstance("Enemy", enemyInstance);
+        }
+
+        private void InitializePlayer()
+        {
+            var playerInstance = _container.Resolve<IPlayerFactory>().Create();
+            playerInstance.transform.position = _playerSpawnPosition.position;
+            _container.RegisterInstance("Player", playerInstance);
         }
 
         private void RegisterInput()
@@ -59,12 +81,13 @@ namespace Level
             _container.RegisterSingleton<IPlayerFactory>(
                 c => new PlayerFactory(_container, _playerPrefab));
             _container.RegisterSingleton<IEnemyFactory>(
-                c => new EnemyFactory(_abstractEnemy, _container.Resolve<AbstractProjectilesSource>()));
+                c => new EnemyFactory(_abstractEnemy, _container.Resolve<AbstractProjectilesSource>(), _enemyConfig, _container.Resolve<IStateMachineFactory>()));
         }
 
         private void FactoryRegistration()
         {
             _container.RegisterSingleton<IFactory>(c => new GenericFactory());
+            _container.RegisterSingleton<IStateMachineFactory>(c => new StateMachineFactory(_volume));
         }
 
         private void ProjectilesSourceRegistration()
@@ -77,19 +100,6 @@ namespace Level
 
             var projectileFactory = projectileEventService as AbstractProjectilesSource;
             _container.RegisterSingleton<AbstractProjectilesSource>(c => projectileFactory);
-        }
-
-        private void RegisterInstances()
-        {
-            var playerInstance = _container.Resolve<IPlayerFactory>().Create();
-            playerInstance.transform.position = _playerSpawnPosition.position;
-
-            var enemyInstance = _container.Resolve<IEnemyFactory>().Create(playerInstance.transform);
-            enemyInstance.transform.position = _enemySpawnPosition.position;
-
-
-            _container.RegisterInstance("Player", playerInstance);
-            _container.RegisterInstance("Enemy", enemyInstance);
         }
 
         private void InitializeUI()

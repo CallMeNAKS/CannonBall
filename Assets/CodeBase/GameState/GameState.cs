@@ -1,4 +1,5 @@
 ﻿using CodeBase.Domain.Enemy;
+using CodeBase.Domain.Enemy.State;
 using CodeBase.Domain.PlayerInput;
 using CodeBase.Domain.Text;
 using Domain.Player;
@@ -38,12 +39,13 @@ namespace GameState
         {
             _onStartComponent.OnStartGame();
             _shop.gameObject.SetActive(false);
+            _enemy.StartIdleState();
         }
 
         private void StartPlayMode()
         {
             _onStartComponent.Exit();
-            _enemy.CreateStateMachine();
+            _enemy.StartFighting();
             
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
