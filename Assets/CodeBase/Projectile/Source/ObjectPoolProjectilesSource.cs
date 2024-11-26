@@ -1,31 +1,30 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Domain.Target;
+using Domain.Target.Source;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Domain.Target.Source
+namespace CodeBase.Projectile.Source
 {
     public class ObjectPoolProjectilesSource : AbstractProjectilesSource
     {
         [SerializeField] private AbstractProjectile projectilePrefab;
         [SerializeField] private float _targetLifeTime = 5f;
         
-        private Queue<AbstractProjectile> _targetsQueue = new Queue<AbstractProjectile>();
-        private List<AbstractProjectile> _allTargets = new List<AbstractProjectile>();
+        private readonly Queue<AbstractProjectile> _projectiles = new Queue<AbstractProjectile>();
         
-        public delegate void OnTargetHit();
-        public event OnTargetHit OnTargetHitEvent;
+        public event Action OnTargetHit;
         
         public override AbstractProjectile GetTarget()
         {
-            if (_targetsQueue.TryDequeue(out var target))
+            if (_projectiles.TryDequeue(out var target))
             {
                 target.gameObject.SetActive(true);
             }
             else
             {
                 target = Instantiate(projectilePrefab);
-                _allTargets.Add(target);
             }
             
             StartCoroutine(TurnOffTarget(target));
@@ -38,25 +37,24 @@ namespace Domain.Target.Source
             if (projectile != null && projectile.gameObject != null)
             {
                 projectile.gameObject.SetActive(false);
-                _targetsQueue.Enqueue(projectile);
+                _projectiles.Enqueue(projectile);
             }
         }
         
         public void OnHit()
         {
-            OnTargetHitEvent?.Invoke();
+            OnTargetHit?.Invoke();
         }
         
         public void Reset()
         {
-            foreach (var target in _allTargets)
+            foreach (var target in _projectiles)
             {
                 target.gameObject.SetActive(false);
                 Destroy(target.gameObject);
             }
 
-            _allTargets.Clear();
-            _targetsQueue.Clear();
+            _projectiles.Clear();
         }
     }
 }
