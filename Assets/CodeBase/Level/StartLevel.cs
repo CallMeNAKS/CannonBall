@@ -25,8 +25,8 @@ namespace Level
         private readonly Transform _enemySpawnPosition;
         private readonly AbstractEnemy _abstractEnemy = Resources.Load<AbstractEnemy>("Enemy/RobotEnemy");
 
-        private readonly AbstractProjectilesSource
-            _projectilesSource = Resources.Load<AbstractProjectilesSource>("Enemy/Source");
+        private readonly ProjectilesSource
+            _projectilesSource = Resources.Load<ProjectilesSource>("Enemy/Source");
 
         private readonly OnStartTextAnimation _onStartText = Resources.Load<OnStartTextAnimation>("UI/StartText");
         private readonly ScoreView _scoreView = Resources.Load<ScoreView>("UI/ScoreView");
@@ -81,7 +81,7 @@ namespace Level
             _container.RegisterSingleton<IPlayerFactory>(
                 c => new PlayerFactory(_container, _playerPrefab));
             _container.RegisterSingleton<IEnemyFactory>(
-                c => new EnemyFactory(_abstractEnemy, _container.Resolve<AbstractProjectilesSource>(), _enemyConfig, _container.Resolve<IStateMachineFactory>()));
+                c => new EnemyFactory(_abstractEnemy, _container.Resolve<ProjectilesSource>(), _enemyConfig, _container.Resolve<IStateMachineFactory>()));
         }
 
         private void FactoryRegistration()
@@ -92,14 +92,14 @@ namespace Level
 
         private void ProjectilesSourceRegistration()
         {
-            AbstractProjectilesSource projectileSourceService =
+            ProjectilesSource projectileSourceService =
                 _container.Resolve<IFactory>().Create(_projectilesSource);
 
             var projectileEventService = projectileSourceService.GetComponent<IProjectileEventService>();
             _container.RegisterSingleton(c => projectileEventService);
 
-            var projectileFactory = projectileEventService as AbstractProjectilesSource;
-            _container.RegisterSingleton<AbstractProjectilesSource>(c => projectileFactory);
+            var projectileFactory = projectileEventService as ProjectilesSource;
+            _container.RegisterSingleton<ProjectilesSource>(c => projectileFactory);
         }
 
         private void InitializeUI()

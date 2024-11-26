@@ -8,11 +8,11 @@ namespace CodeBase.Domain.Enemy.Factory
     public class EnemyFactory : IEnemyFactory
     {
         private readonly AbstractEnemy _enemyPrefab;
-        private readonly AbstractProjectilesSource _projectilesSource;
+        private readonly ProjectilesSource _projectilesSource;
         private readonly EnemyConfig _config;
         private readonly IStateMachineFactory _stateMachineFactory;
 
-        public EnemyFactory(AbstractEnemy enemyPrefab, AbstractProjectilesSource projectilesSource, EnemyConfig config, IStateMachineFactory stateMachineFactory)
+        public EnemyFactory(AbstractEnemy enemyPrefab, ProjectilesSource projectilesSource, EnemyConfig config, IStateMachineFactory stateMachineFactory)
         {
             _enemyPrefab = enemyPrefab;
             _projectilesSource = projectilesSource;
