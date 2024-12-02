@@ -26,7 +26,7 @@ namespace CodeBase.Domain.Enemy
             Mover = GetComponent<IMover>();
         }
 
-        public void Init(Transform target, AbstractProjectilesSource projectilesSource, IStateMachine stateMachine)
+        public void Init(Transform target, ProjectilesSource projectilesSource, IStateMachine stateMachine)
         {
             StateMachine = stateMachine;
             Shooter.Init(target, projectilesSource);

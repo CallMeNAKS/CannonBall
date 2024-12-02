@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Domain.Target;
 using Domain.Target.Source;
@@ -7,16 +6,14 @@ using UnityEngine;
 
 namespace CodeBase.Projectile.Source
 {
-    public class ObjectPoolProjectilesSource : AbstractProjectilesSource
+    public class ObjectPoolProjectilesSource : ProjectilesSource
     {
         [SerializeField] private AbstractProjectile projectilePrefab;
         [SerializeField] private float _targetLifeTime = 5f;
         
         private readonly Queue<AbstractProjectile> _projectiles = new Queue<AbstractProjectile>();
         
-        public event Action OnTargetHit;
-        
-        public override AbstractProjectile GetTarget()
+        public override AbstractProjectile Get()
         {
             if (_projectiles.TryDequeue(out var target))
             {
@@ -27,11 +24,11 @@ namespace CodeBase.Projectile.Source
                 target = Instantiate(projectilePrefab);
             }
             
-            StartCoroutine(TurnOffTarget(target));
+            StartCoroutine(LifeCycle(target));
             return target;
         }
 
-        private IEnumerator TurnOffTarget(AbstractProjectile projectile)
+        private IEnumerator LifeCycle(AbstractProjectile projectile)
         {
             yield return new WaitForSeconds(_targetLifeTime);
             if (projectile != null && projectile.gameObject != null)
@@ -39,11 +36,6 @@ namespace CodeBase.Projectile.Source
                 projectile.gameObject.SetActive(false);
                 _projectiles.Enqueue(projectile);
             }
-        }
-        
-        public void OnHit()
-        {
-            OnTargetHit?.Invoke();
         }
         
         public void Reset()

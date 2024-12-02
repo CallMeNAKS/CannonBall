@@ -5,15 +5,15 @@ using UnityEngine;
 
 namespace Domain.Target.Source
 {
-    public class ProjectilesListener : AbstractProjectilesSource, IProjectileEventService
+    public class ProjectilesListener : ProjectilesSource, IProjectileEventService
     {
-        [SerializeField] private AbstractProjectilesSource _source;
+        [SerializeField] private ProjectilesSource _source;
 
         public event Action<int> OnHit;
 
-        public override AbstractProjectile GetTarget()
+        public override AbstractProjectile Get()
         {
-            AbstractProjectile projectile = _source.GetTarget();
+            AbstractProjectile projectile = _source.Get();
             projectile.Hit += InvokeEvent;
             projectile.Disabled += Unsubscribe;
             return projectile;

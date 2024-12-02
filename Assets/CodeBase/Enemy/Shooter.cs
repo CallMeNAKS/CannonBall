@@ -16,11 +16,11 @@ namespace CodeBase.Domain.Enemy
         [SerializeField] private float _fireDelay = 0.5f;
 
         private Transform _target;
-        private AbstractProjectilesSource _projectileSource;
+        private ProjectilesSource _projectileSource;
 
         private CancellationTokenSource _cancellationTokenSource;
 
-        public void Init(Transform target, AbstractProjectilesSource projectileSource)
+        public void Init(Transform target, ProjectilesSource projectileSource)
         {
             _target = target;
             _projectileSource = projectileSource;
@@ -38,7 +38,7 @@ namespace CodeBase.Domain.Enemy
                     if (token.IsCancellationRequested) break;
 
                     Vector3 direction = _target.position + new Vector3(0, 1f, 0) - position.position;
-                    AbstractProjectile projectile = _projectileSource.GetTarget();
+                    AbstractProjectile projectile = _projectileSource.Get();
                     projectile.transform.position = position.position;
                     projectile.ApplyPower(direction * _attackPower);
 
@@ -59,7 +59,7 @@ namespace CodeBase.Domain.Enemy
                     if (token.IsCancellationRequested) break;
 
                     Vector3 direction = _target.position + new Vector3(0, 1f, 0) - position.position;
-                    AbstractProjectile projectile = _projectileSource.GetTarget();
+                    AbstractProjectile projectile = _projectileSource.Get();
                     projectile.transform.position = position.position;
                     projectile.ApplyPower(direction * _attackPower);
 

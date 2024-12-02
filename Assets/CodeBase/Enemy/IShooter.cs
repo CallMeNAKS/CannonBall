@@ -6,7 +6,7 @@ namespace CodeBase.Domain.Enemy
 {
     public interface IShooter
     {
-        public void Init(Transform target, AbstractProjectilesSource projectileSource); // Нормально ли так делать? 
+        public void Init(Transform target, ProjectilesSource projectileSource); // Нормально ли так делать? 
         public Task StartShooting();
         public Task StartShootingSecond();
         public void StopShooting();
